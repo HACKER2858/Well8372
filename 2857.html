@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Registration & Login Demo</title>
+<style>
+
+:root{
+  --accent:#2d9b4a;
+  --bg:#121212;
+  --card:#1e1e1e;
+  --muted:#aaa;
+  --danger:#e74c3c;
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+body{margin:0;padding:24px;background:var(--bg);color:#fff;transition:0.3s}
+.container{
+  max-width:420px;margin:28px auto;padding:25px;background:var(--card);border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.6);transition:0.3s;position:relative;overflow:hidden;
+}
+.container:hover{box-shadow:0 12px 30px rgba(46,204,113,0.8);transform:translateY(-2px);}
+h1{margin:0 0 14px;font-size:26px;color:var(--accent);text-align:center;text-shadow:0 0 8px var(--accent);}
+.small{font-size:13px;color:var(--muted);}
+label{display:block;margin-top:12px;font-weight:600;font-size:13px;}
+input[type="text"],input[type="password"],input[type="tel"]{
+  width:100%;padding:12px 14px;margin-top:6px;border:1px solid #333;border-radius:8px;
+  font-size:15px;background:#111;color:#fff;outline:none;transition:0.3s;
+}
+input[type="text"]:focus,input[type="password"]:focus,input[type="tel"]:focus{border-color:var(--accent);box-shadow:0 0 8px var(--accent);}
+.row{display:flex;gap:8px;}
+.btn{
+  display:inline-block;margin-top:16px;padding:12px 16px;background:var(--accent);color:white;
+  border-radius:8px;border:0;font-weight:700;cursor:pointer;transition:0.3s;box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+.btn:hover{box-shadow:0 8px 20px rgba(46,204,113,0.8);transform:scale(1.03);}
+.btn.secondary{background:#333;color:#fff;box-shadow:0 5px 15px rgba(0,0,0,0.3);}
+.muted{color:var(--muted);font-size:13px;margin-top:8px;}
+.link{color:var(--accent);cursor:pointer;text-decoration:underline;}
+.center{text-align:center;}
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.note{font-size:12px;color:#aaa;margin-top:10px;background:#222;padding:8px;border-radius:6px;}
+.error{color:var(--danger);margin-top:8px;font-weight:600;}
+footer{margin-top:18px;font-size:15px;color: green;text-align:center;}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<div class="container" id="registerView">
+  <h1>Register</h1>
+  <div class="small">Create your account with phone number and password.</div>
+
+  <label for="regPhone">Phone number</label>
+  <input id="regPhone" type="tel" placeholder="+254701234567" inputmode="tel" />
+
+  <label for="regPassword">Password</label>
+  <input id="regPassword" type="password" placeholder="Choose a password" />
+
+  <div class="checkbox-row">
+    <input id="showPassReg" type="checkbox" />
+    <label for="showPassReg" style="font-weight:600;font-size:13px;margin:0">Show password</label>
+  </div>
+
+  <div id="regError" class="error hidden"></div>
+
+  <button id="registerBtn" class="btn">Register</button>
+
+  <div class="muted center">Already have an account? <span id="goLogin" class="link">Login</span></div>
+  <div class="note">Data integrity is uncompromisingly maintained and all sensitive information remains fortified.</div>
+</div>
+
+<div class="container hidden" id="loginView">
+  <h1>Login</h1>
+  <div class="small">Sign in with your registered phone number and password.</div>
+
+  <label for="loginPhone">Phone number</label>
+  <input id="loginPhone" type="tel" placeholder="+254701234567" inputmode="tel" />
+
+  <label for="loginPassword">Password</label>
+  <input id="loginPassword" type="password" placeholder="Your password" />
+
+  <div class="checkbox-row">
+    <input id="rememberMe" type="checkbox" />
+    <label for="rememberMe" style="font-weight:600;font-size:13px;margin:0">Remember me</label>
+  </div>
+
+  <div id="loginError" class="error hidden"></div>
+
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button id="loginBtn" class="btn">Login</button>
+    <button id="backToRegister" class="btn secondary">Register</button>
+  </div>
+
+  <div style="margin-top:10px" class="center">
+    <span id="forgotLink" class="link">Forgot password?</span>
+  </div>
+
+  <div class="note">Embark upon an intensive ethical hacking mastery expedition today.</div>
+</div>
+
+<div class="container hidden" id="resetView">
+  <h1>Reset Password</h1>
+  <div class="small">Enter your phone number and set a new password.</div>
+
+  <label for="resetPhone">Phone number</label>
+  <input id="resetPhone" type="tel" />
+
+  <label for="resetPassword">New password</label>
+  <input id="resetPassword" type="password" />
+
+  <div id="resetError" class="error hidden"></div>
+
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button id="resetBtn" class="btn">Reset Password</button>
+    <button id="resetCancel" class="btn secondary">Cancel</button>
+  </div>
+</div>
+
+<footer><strong>🚀 The world is accelerating toward a digital future where technology defines opportunity, innovation, and success. Investing in digital learning today equips you with critical skills, global competitiveness, and professional resilience. Embrace technology, master emerging tools, and secure your relevance. Adapt, evolve, and lead confidently in a rapidly transforming digital economy!     </strong></footer>
+
+<script>
+const YOUTUBE_URL = "https://summitsolutions28.github.io/Well8372/1999.html";
+
+// IndexedDB helper
+function openDB() {
+  return new Promise((resolve, reject)=>{
+    const request = indexedDB.open('demo_users',1);
+    request.onupgradeneeded = e=>{
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains('users')){
+        db.createObjectStore('users',{keyPath:'phone'});
+      }
+    };
+    request.onsuccess = e => resolve(e.target.result);
+    request.onerror = e => reject(e.target.error);
+  });
+}
+
+function getUser(phone){ 
+  return openDB().then(db=>{
+    return new Promise((res,rej)=>{
+      const tx = db.transaction('users','readonly');
+      const store = tx.objectStore('users');
+      const req = store.get(phone);
+      req.onsuccess = ()=>res(req.result);
+      req.onerror = ()=>rej(req.error);
+    });
+  });
+}
+
+function setUser(user){
+  return openDB().then(db=>{
+    return new Promise((res,rej)=>{
+      const tx = db.transaction('users','readwrite');
+      const store = tx.objectStore('users');
+      const req = store.put(user);
+      req.onsuccess = ()=>res();
+      req.onerror = ()=>rej(req.error);
+    });
+  });
+}
+
+// Security helpers
+function sanitizeInput(str){return str.replace(/<[^>]*>?/gm, '');}
+function normalizePhone(p){return p?p.trim().replace(/\s|-/g,''):"";}
+function el(id){return document.getElementById(id);}
+function show(viewId){document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden')); el(viewId).classList.remove('hidden');}
+
+// SHA-256 hash helper
+async function hashPassword(password){
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Elements
+const regPhone = el('regPhone'), regPassword = el('regPassword'), registerBtn = el('registerBtn'), regError = el('regError'), showPassReg = el('showPassReg'), goLogin = el('goLogin');
+const loginPhone = el('loginPhone'), loginPassword = el('loginPassword'), loginBtn = el('loginBtn'), loginError = el('loginError'), backToRegister = el('backToRegister'), rememberMe = el('rememberMe');
+const forgotLink = el('forgotLink');
+const resetPhone = el('resetPhone'), resetPassword = el('resetPassword'), resetBtn = el('resetBtn'), resetCancel = el('resetCancel'), resetError = el('resetError');
+
+// Show password toggle
+showPassReg.addEventListener('change',()=>regPassword.type=showPassReg.checked?'text':'password');
+
+// Navigation
+goLogin.addEventListener('click',()=>{loginPhone.value='';show('loginView');});
+backToRegister.addEventListener('click',()=>show('registerView'));
+forgotLink.addEventListener('click',()=>{resetPhone.value=loginPhone.value;resetPassword.value='';show('resetView');});
+resetCancel.addEventListener('click',()=>show('loginView'));
+
+// Register
+registerBtn.addEventListener('click',async()=>{
+  const phone=sanitizeInput(normalizePhone(regPhone.value));
+  const pass=sanitizeInput(regPassword.value||'');
+  regError.classList.add('hidden');
+  if(!phone){regError.textContent="Please enter a phone number."; regError.classList.remove('hidden'); return;}
+  if(!pass || pass.length<4){regError.textContent="Please choose a password of at least 4 characters."; regError.classList.remove('hidden'); return;}
+  const existing = await getUser(phone);
+  if(existing){regError.textContent="A user with that phone number already exists."; regError.classList.remove('hidden'); return;}
+  const hashedPass = await hashPassword(pass);
+  await setUser({phone,password:hashedPass,createdAt:Date.now()});
+  alert('Registration successful.');
+  loginPhone.value=phone;loginPassword.value='';rememberMe.checked=false;show('loginView');
+});
+
+// Login
+loginBtn.addEventListener('click',async()=>{
+  const phone=sanitizeInput(normalizePhone(loginPhone.value));
+  const pass=sanitizeInput(loginPassword.value||'');
+  loginError.classList.add('hidden');
+  if(!phone){loginError.textContent="Please enter your phone number."; loginError.classList.remove('hidden'); return;}
+  if(!pass){loginError.textContent="Please enter your password."; loginError.classList.remove('hidden'); return;}
+  const hashedPass = await hashPassword(pass);
+  const user = await getUser(phone);
+  if(!user || user.password!==hashedPass){loginError.textContent="Invalid phone or password."; loginError.classList.remove('hidden'); return;}
+  if(rememberMe.checked) localStorage.setItem('rememberedPhone',phone); else localStorage.removeItem('rememberedPhone');
+  window.location.href = YOUTUBE_URL;
+});
+
+// Reset password
+resetBtn.addEventListener('click',async()=>{
+  const phone=sanitizeInput(normalizePhone(resetPhone.value));
+  const newPass=sanitizeInput(resetPassword.value||'');
+  resetError.classList.add('hidden');
+  if(!phone){resetError.textContent="Please enter your phone number."; resetError.classList.remove('hidden'); return;}
+  if(!newPass || newPass.length<4){resetError.textContent="Please provide a new password (min 4 chars)."; resetError.classList.remove('hidden'); return;}
+  const user = await getUser(phone);
+  if(!user){resetError.textContent="No user found with that phone number."; resetError.classList.remove('hidden'); return;}
+  const hashedNewPass = await hashPassword(newPass);
+  user.password=hashedNewPass;
+  await setUser(user);
+  alert('Password reset successful.');
+  loginPhone.value=phone;loginPassword.value='';show('loginView');
+});
+
+// Prefill login phone if remembered
+const rem=localStorage.getItem('rememberedPhone'); if(rem){loginPhone.value=rem;rememberMe.checked=true;}
+</script>
+</body>
+</html>
