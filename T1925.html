@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Trading Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* === Reset & Base Styles === */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px 30px;
+            color: #333;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1, h2 {
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #1f1c2c;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: #555;
+            text-align: justify;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .download-btn, .premium-btn, .whatsapp-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn { background: #ff6f61; color: #fff; }
+        .download-btn:hover { background: #ff4a3a; }
+
+        .premium-btn { background: #4CAF50; color: #fff; }
+        .premium-btn:hover { background: #45a049; }
+
+        .whatsapp-btn { background: #25D366; color: #fff; }
+        .whatsapp-btn:hover { background: #1ebe57; }
+
+        #status { margin-top: 20px; font-weight: 500; text-align: center; color: #333; }
+
+        .download-section { margin-top: 25px; text-align: center; }
+
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            .download-btn, .premium-btn, .whatsapp-btn { 
+                width: 100%; 
+                margin-top: 10px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="premiumBox">
+    <h1>Trading Strategy: High-Profit Techniques</h1>
+    <p>Discover a well-structured trading strategy that leverages technical analysis, trend lines, and risk management. This guide includes actionable steps, charts, and insights to help traders make informed decisions.</p>
+
+    <img src="Screenshot_20260219-142527.jpg" alt="Trading Chart Example">
+    <p>Charts demonstrate entry and exit points using this strategy. Observe the patterns carefully for timing your trades.</p>
+
+    <img src="Screenshot_20260219-142610.jpg" alt="Trading Strategy Example">
+    <p>Each trade example comes with proper stop-loss and take-profit management to protect your capital.</p>
+
+    <div class="download-section">
+        <div class="button-container">
+            <button class="download-btn" onclick="startProcess()">Download Document</button>
+        </div>
+        <div id="status"></div>
+    </div>
+</div>
+
+<script src="2832.js"></script>
+</body>
+</html>
