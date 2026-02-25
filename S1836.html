@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport & Infrastructure Survey Rules</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0b0f1c;  /* deep space gradient base */
+            color: #f0f4ff;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* cinematic animated gradient overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(100, 150, 255, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 90% 70%, rgba(255, 200, 150, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(180, 130, 255, 0.3) 0%, transparent 45%),
+                linear-gradient(135deg, #0c1126 0%, #1a1f3a 50%, #141b33 100%);
+            z-index: 0;
+            animation: liquidShift 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes liquidShift {
+            0% { opacity: 0.7; filter: hue-rotate(-3deg) saturate(1.1); }
+            50% { opacity: 1; filter: hue-rotate(4deg) saturate(1.4); }
+            100% { opacity: 0.8; filter: hue-rotate(-1deg) saturate(1.2); }
+        }
+
+        /* floating orbs (life energy) */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), rgba(150,180,255,0.2));
+            filter: blur(70px);
+            z-index: 1;
+            pointer-events: none;
+            animation: orbFloat 24s infinite alternate;
+        }
+
+        .orb1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -100px;
+            background: #8f9eff;
+            opacity: 0.2;
+            mix-blend-mode: overlay;
+        }
+
+        .orb2 {
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            right: -150px;
+            background: #ffb88c;
+            opacity: 0.15;
+            filter: blur(90px);
+            mix-blend-mode: soft-light;
+            animation-duration: 30s;
+        }
+
+        .orb3 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 60%;
+            background: #c9adff;
+            opacity: 0.2;
+            filter: blur(60px);
+            mix-blend-mode: lighten;
+            animation-duration: 18s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, -30px) scale(1.2); }
+        }
+
+        /* main container — ultra-premium glass */
+        .container {
+            position: relative;
+            z-index: 30;
+            max-width: 1000px;
+            margin: auto;
+            background: rgba(18, 22, 45, 0.45);
+            backdrop-filter: blur(14px) saturate(200%);
+            -webkit-backdrop-filter: blur(14px) saturate(200%);
+            padding: 2.8rem 3rem;
+            border-radius: 3.5rem;
+            box-shadow: 
+                0 40px 70px -15px rgba(0,0,0,0.8),
+                0 0 0 1px rgba(255,255,255,0.1) inset,
+                0 0 40px rgba(100, 140, 255, 0.2);
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: all 0.4s;
+        }
+
+        /* header styles — retained all text, only visual upgrade */
+        h1 {
+            text-align: center;
+            font-weight: 700;
+            font-size: 2.8rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #ffffff, #ffec9e, #a6c9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px rgba(255,235,120,0.3);
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(255,235,120,0.3); }
+            100% { text-shadow: 0 0 40px #ffd966, 0 0 60px #6d8cff; }
+        }
+
+        h2 {
+            margin-top: 2.2rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff6d5, #b3d9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            border-bottom: 2px solid rgba(255,215,100,0.4);
+            padding-bottom: 6px;
+        }
+
+        /* section cards — depth + translucency */
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 1.8rem 2rem;
+            margin-top: 1.2rem;
+            border-radius: 2.2rem;
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05);
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .section:hover {
+            transform: scale(1.01);
+            box-shadow: 0 25px 40px -15px #000d1a, 0 0 0 1px rgba(255,255,255,0.1) inset;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* lists — elegant spacing */
+        ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            line-height: 1.9;
+            color: #e6edff;
+            font-weight: 300;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #ffd966;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px gold;
+        }
+
+        .highlight {
+            color: #ffb347;
+            font-weight: 600;
+            background: rgba(255,180,70,0.1);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid rgba(255,200,100,0.3);
+            backdrop-filter: blur(4px);
+            margin: 0 2px;
+            text-shadow: 0 0 8px #ffb347;
+        }
+
+        /* paragraph inside anti-cheat */
+        .section p {
+            margin-bottom: 0.8rem;
+            color: #d9e3ff;
+        }
+
+        .section p strong {
+            color: #ffb85c;
+            font-weight: 600;
+        }
+
+        /* button — premium, glowing, interactive */
+        button {
+            margin-top: 2.8rem;
+            width: 100%;
+            padding: 1.2rem 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 3rem;
+            background: rgba(255, 235, 59, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #fff9e6;
+            border: 1px solid rgba(255,235,120,0.4);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 15px 25px -10px #000, 0 0 0 1px rgba(255,255,200,0.1) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-15deg);
+            transition: left 0.8s;
+        }
+
+        button:hover::before {
+            left: 150%;
+        }
+
+        button:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 235, 59, 0.35);
+            border-color: #ffe680;
+            box-shadow: 0 30px 40px -10px #000, 0 0 30px #ffd966;
+            color: #ffffff;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* footer — exactly same text, but refined */
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            color: #bac8ff;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s;
+        }
+
+        footer:hover {
+            opacity: 1;
+            color: #d6e2ff;
+        }
+
+        /* retain all content, no deletion — just styling */
+        /* ensure responsiveness */
+        @media (max-width: 700px) {
+            .container { padding: 2rem 1.5rem; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.5rem; }
+            .section { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- floating orbs (pure life animation) -->
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
+    <div class="container">
+
+        <h1>Survey Rules</h1>
+
+        <h2>1️⃣ Daily Participation Limit</h2>
+        <div class="section">
+            <ul>
+                <li>Maximum of <span class="highlight">3 questions per day</span>.</li>
+                <li>Survey stops automatically after reaching the limit.</li>
+                <li>Progress is saved using browser storage.</li>
+            </ul>
+        </div>
+
+        <h2>2️⃣ Time Limit</h2>
+        <div class="section">
+            <ul>
+                <li>Each session has a <span class="highlight">2-minute countdown</span>.</li>
+                <li>If time expires, survey ends immediately.</li>
+                <li>User must return the next day to continue.</li>
+            </ul>
+        </div>
+
+        <h2>3️⃣ Answering Rules</h2>
+        <div class="section">
+            <ul>
+                <li>Correct answer → <span class="highlight">+ Ksh 10</span></li>
+                <li>Wrong answer → <span class="highlight">– Ksh 7</span></li>
+                <li>Wrong answer immediately stops the survey.</li>
+            </ul>
+        </div>
+
+        <h2>4️⃣ Withdrawal Rules</h2>
+        <div class="section">
+            <ul>
+                <li>Minimum balance required: <span class="highlight">Ksh 100</span></li>
+                <li>Maximum withdrawal per request: <span class="highlight">Ksh 65</span></li>
+                <li>Withdrawal amount must not exceed current balance.</li>
+            </ul>
+        </div>
+
+        <h2>5️⃣ Account Activation</h2>
+        <div class="section">
+            This is done prior to withdrawing then submit the withdrawal request <span class="highlight">Ksh 40</span>.
+        </div>
+
+        <h2>6️⃣ Verification Process</h2>
+        <div class="section">
+            <ul>
+                <li>User submits name and activation message.</li>
+                <li>Submission sent for admin verification.</li>
+                <li>Admin may approve or reject request.</li>
+                <li>Approved users' rewards will be credited to the submitted phone number.</li>
+            </ul>
+        </div>
+
+        <h2>7️⃣ Anti-Cheating Enforcement</h2>
+        <div class="section">
+            <p>If cheating is detected:</p>
+            <ul>
+                <li>Survey terminates immediately.</li>
+                <li><span class="highlight">Ksh 3 penalty</span> is deducted.</li>
+                <li>User is blocked for the day.</li>
+            </ul>
+
+            <p><br><strong>Cheating Triggers:</strong></p>
+            <ul>
+                <li>Tab switching</li>
+                <li>Right-click usage</li>
+                <li>Copy, Paste, or Cut actions</li>
+                <li>Opening Developer Tools</li>
+                <li>Using restricted shortcuts (F12, Ctrl+Shift+I, Ctrl+U)</li>
+            </ul>
+        </div>
+
+        <button onclick="goBack()">Return to Survey</button>
+
+        <footer>
+            © 2026 Summit Solutions | All Rights Reserved
+        </footer>
+
+    </div>
+
+    <script>
+        // Get topic from URL (unchanged)
+        const params = new URLSearchParams(window.location.search);
+        const topic = params.get("topic");
+
+        // Survey pages mapping (unchanged)
+        const surveyPages = {
+            health: "https://summitsolutions28.github.io/Well8372/S1931.html",
+            education: "https://summitsolutions28.github.io/Well8372/S1943.html",
+            religion: "https://summitsolutions28.github.io/Well8372/S1936.html",
+            worldlife: "https://summitsolutions28.github.io/Well8372/S1919.html",
+            gamesport: "https://summitsolutions28.github.io/Well8372/S1513.html",
+            business: "https://summitsolutions28.github.io/Well8372/S1313.html",
+            transport: "https://summitsolutions28.github.io/Well8372/S1925.html",
+            government: "https://summitsolutions28.github.io/Well8372/S1956.html"
+        };
+
+        // Redirect based on selected topic (unchanged)
+        function goBack() {
+            if (surveyPages[topic]) {
+                window.location.href = surveyPages[topic];
+            } else {
+                alert("No survey selected. Please go back and choose a topic.");
+            }
+        }
+    </script>
+</body>
+</html>
